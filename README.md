@@ -1,4 +1,5 @@
 ![Conveyor](http://amaia.at/conveyor.png)
+
 *Un générateur automatique de diffusions pour les associations de l'ENS de Lyon.*
 
 ## Présentation.
