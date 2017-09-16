@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+    </head>
+    <body style="margin: 0; padding: 0;">
+        <div style="margin: 0; padding: 0; width: 100%; height: 149px; overflow: hidden; background: url('http://enscene.org/images/newsletter/background.png')">
+            <img src="http://enscene.org/images/newsletter/logo-prog.png" alt="Enscène !" />
+            <div style="float: right; text-align: right; font-family: 'Trebuchet MS', Arial; text-transform: uppercase; color: #fff; font-size: 24px; margin-top: 75px; margin-right: 25px; letter-spacing: -1px;">
+                <p style="margin: 0; font-weight: 600;">Diffusion du {{ date.strftime('%d/%m/%Y') }}</p>
+                <p style="margin: 0; font-weight: 100; margin-top: -2px; color: #eee;">{{ title }}</p>
+            </div>
+        </div>
+        <div style="margin: 0; margin-top: 20px; padding: 10px 30px; line-height: 23px;">
+            {% include 'enscene/content.html' %}
+        </div>
+
+        <p style="border-top: 1px solid #eee; padding: 25px 25px 15px; font-family: monospace; font-size: 12px; text-align: justify;">Vous recevez ce message car vous êtes inscrit sur la liste de diffusion <i>enscene.newsletter</i>, dont vous pouvez vous désabonner à l'adresse <a href="https://listes.ens-lyon.fr/sympa/info/enscene.newsletter">https://listes.ens-lyon.fr/sympa/info/enscene.newsletter</a>. <br /><br />Enscène - Licence : 2-1073444 ; 3-1073445 - Numéro SIRET : 49168683800013</p>
+    </body>
+</html>

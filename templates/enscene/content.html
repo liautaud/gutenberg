@@ -1,0 +1,43 @@
+{% if greeting %}
+<p style="font-family: 'Book Antiqua', Arial; font-size: 24px; text-align: justify; font-weight: bold; font-style: italic; margin-top: 20px;">{{ greeting }}</p>
+{% endif %}
+
+{% for text in introduction %}
+<p style="font-family: Arial; font-size: 16px; text-align: justify;">{{ text }}</p>
+{% endfor %}
+
+{% for section in sections %}
+<h1 style="color: white; background: {{ section.color | default('#333') }}; padding: 13px 30px; margin-left: -30px; margin-right: 20px; display: inline-block; font-family: Arial; letter-spacing: -1px; font-weight: normal; font-size: 22px; margin-top: 45px; margin-bottom: 10px; border-radius: 0 3px 3px 0 !important;">
+    // {{ section.title | upper }}
+</h1>
+{% if section.date %}
+<span style="position: relative; font-size: 13px; vertical-align: 4px; display: inline-block; padding: 7px 10px; border: 2px solid #000; border-radius: 5px 0 0 5px !important; font-family: Arial; font-weight: bold;">
+  <img style="margin-right: 8px; vertical-align: -4px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTExIDc5LjE1ODMyNSwgMjAxNS8wOS8xMC0wMToxMDoyMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjdFOEExNzIyQTgyMDExRTZCNUVEQTQ2NUZGMzYxOTE1IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjdFOEExNzIzQTgyMDExRTZCNUVEQTQ2NUZGMzYxOTE1Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6N0U4QTE3MjBBODIwMTFFNkI1RURBNDY1RkYzNjE5MTUiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6N0U4QTE3MjFBODIwMTFFNkI1RURBNDY1RkYzNjE5MTUiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5I78JtAAAAeklEQVR42mJgwAT/oZgQwKqOiYHKAGRgEBC/xmLjfwIYXd0rIPZnQDOMUvySEck2Rgp9+58mYchIZIySFClUBSxorh18YchEogv+0z2nsJCYIhgIhTldw5CoMBvQMCQqzOgShq+JLP+IKR9fMkALxZdUMPAFEPsCBBgAcOxWan1RhGAAAAAASUVORK5CYII=" />
+  {{ section.date | upper }}
+</span>{% endif %}{% if section.place %}<span style="position: relative; font-size: 13px; vertical-align: 4px; display: inline-block; margin: 0; left: -2px; padding: 7px 10px; border: 2px solid #000; border-radius: 0 5px 5px 0 !important; font-family: Arial;">
+  {{ section.place | upper }}
+</span>
+{% endif %}
+
+<div style="overflow: hidden;">
+    {% if section.image %}
+        {% if section.align == "right" %}
+            <img src="{{ section.image }}" alt="{{ section.title }}" style="float: right; margin: 20px 0 30px 25px; width: 190px;" />
+        {% else %}
+            <img src="{{ section.image }}" alt="{{ section.title }}" style="float: left; margin: 20px 25px 30px 0; width: 190px;" />
+        {% endif %}
+    {% endif %}
+
+    {% for text in section.content %}
+    <p style="font-family: Arial; font-size: 16px; text-align: justify; margin-top: 25px;">{{ text }}</p>
+    {% endfor %}
+
+    {% for text in section.appendices %}
+    <p style="font-family: Arial; font-size: 16px; text-align: justify; margin-bottom: 0; margin-top: {% if loop.first %}30px;{% else %}0;{% endif %} font-variant: small-caps;">&rarr; {{ text | first }}</p>
+    {% endfor %}
+</div>
+{% endfor %}
+
+{% if closing %}
+<p style="font-family: 'Book Antiqua', Arial; font-style: italic; font-size: 33px; margin: 28px 0 -15px; text-align: center; letter-spacing: 2px; font-weight: bold; padding: 25px;">{{ closing }}</p>
+{% endif %}
