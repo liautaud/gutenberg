@@ -1,0 +1,15 @@
+author: Romain Liautaud
+title: Un essai
+date: 2017/09/16
+template: enscene.diffusion
+sections:
+  - title: Super truc
+    type: theater
+    content: |
+      Un peu de texte *multiligne*.
+      Il peut être formatté en Markdown.
+
+      C'est incroyable, non?
+    appendices:
+      - Faites ceci sans cela.
+      - Je me demande pourquoi.

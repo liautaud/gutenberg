@@ -1,0 +1,13 @@
+<h1>{{ title }}</h1>
+<h2>{{ subtitle }}</h2>
+
+<ul>
+{% for section in sections %}
+	<li>
+		<h3>{{ section.title }}</h3>
+		{% for text in section.content %}
+		<p>{{ text }}</p>
+		{% endfor %}
+	</li>
+{% endfor %}
+</ul>

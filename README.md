@@ -1,14 +1,23 @@
-![Conveyor](http://amaia.at/conveyor.png)
+![Conveyor](http://amaia.at/gutenberg.png)
 
 *Un générateur automatique de diffusions pour les associations de l'ENS de Lyon.*
 
+
 ## Présentation.
 
-*Conveyor* est un utilitaire en ligne de commande qui permet de générer automatiquement des diffusions e-mail de plusieurs associations de l'ENS de Lyon. Il attend en entrée un fichier YAML dont le schéma est décrit ci-dessous, et renvoie le code HTML correspondant au corps de l'e-mail généré.
+*Conveyor* est un utilitaire en ligne de commande qui permet de générer automatiquement des diffusions e-mail pour plusieurs associations de l'ENS de Lyon. Il attend en entrée un fichier YAML dont le schéma est décrit ci-dessous, et écrit le code HTML correspondant à l'e-mail généré dans un fichier donné.
 
 ```
-./conveyor 2017-09-15.yml --out=2017-09-15.html
+gutenberg 2017-09-15.yml 2017-09-15.html
 ```
+
+
+## Installation.
+
+```
+python3 -m pip install --user -e .
+```
+
 
 ## Format d'entrée.
 
@@ -19,7 +28,7 @@ Ils doivent contenir les champs suivants :
 - `title` : Le titre de la diffusion *(qui apparaîtra notamment dans l'en-tête)*.
 - `subtitle` : Le sous-titre de la diffusion, le cas échéant.
 - `date` : La date de la diffusion, au format `1977-04-22`.
-- `template` : Le thème à utiliser pour la diffusion. Pour l'instant, sont disponibles `enscene-diffusion` et `enscene-programmation`.
+- `template` : Le thème à utiliser pour la diffusion. Pour l'instant, sont disponibles `enscene.diffusion` et `enscene.programmation`.
 
 Le reste des champs dépend de la valeur de `template`. On retrouve en général :
 - `greeting` : La formule d'appel à utiliser en début de diffusion.
