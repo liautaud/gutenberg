@@ -47,19 +47,19 @@ def parse(source):
     # Validate the YAML schema.
     required(data, 'author')
     required(data, 'title')
-    optional(data, 'subtitle')
     required(data, 'date', date)
     required(data, 'template')
     optional(data, 'greeting')
     optional(data, 'introduction', paragraphs)
     required(data, 'sections.title')
-    required(data, 'sections.type')
+    optional(data, 'sections.color')
     optional(data, 'sections.image')
     optional(data, 'sections.align', ('left', 'right'))
-    optional(data, 'sections.dates.*', date)
+    optional(data, 'sections.date')
     optional(data, 'sections.place')
     required(data, 'sections.content', paragraphs)
     optional(data, 'sections.appendices.*', paragraphs)
+    optional(data, 'closing')
 
     # Return the converted data.
     return data

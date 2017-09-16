@@ -26,21 +26,22 @@ Les fichiers traités par *Gutenberg* doivent être au format YAML.
 Ils doivent contenir les champs suivants :
 - `author` : L'auteur de la diffusion, au format `Prénom Nom <email>`.
 - `title` : Le titre de la diffusion *(qui apparaîtra notamment dans l'en-tête)*.
-- `subtitle` : Le sous-titre de la diffusion, le cas échéant.
 - `date` : La date de la diffusion, au format `1977-04-22`.
-- `template` : Le thème à utiliser pour la diffusion. Pour l'instant, sont disponibles `enscene.diffusion` et `enscene.programmation`.
+- `template` : Le thème à utiliser pour la diffusion.
+  Pour l'instant, sont disponibles `enscene.diffusion` et `enscene.programmation`.
 
 Le reste des champs dépend de la valeur de `template`. On retrouve en général :
 - `greeting` : La formule d'appel à utiliser en début de diffusion.
 - `introduction` : Le texte d'introduction de la diffusion, au format Markdown.
 - `sections` : La liste des sections de la diffusion.
+- `closing` : La formule de fermeture à utiliser en fin de diffusion.
 
 Chaque section contient en général les champs suivants :
 - `title` : Le titre de la section.
-- `type` : Le type de la section, parmi `theater`, `dance`, `music`, `other`.
+- `color` : La couleur du titre de la section.
 - `image` : L'image qui accompagne la section, le cas échéant.
 - `align` : La position de l'image par rapport au texte, parmi `left` et `right`.
-- `dates` : La liste des dates de l'événement, le cas échéant, au format `1977-04-22 01:00`.
+- `date` : La date de l'événement, le cas échéant.
 - `place` : Le lieu de l'événement, le cas échéant.
 - `content` : Le contenu de la section, au format Markdown.
 - `appendices` : La liste des points complémentaires de la section, au format Markdown.
