@@ -1,0 +1,34 @@
+author: Romain Liautaud
+title: Programmation de Novembre 2016
+date: "2016-11-01"
+template: enscene.programmation
+
+greeting: Chers adhérent·e·s,
+introduction: |
+  Que vous soyez des férus de théâtre ou d'improvisation, des amateurs de danse ou des mélomanes accomplis, Enscène revient en cette fin d'année et vous propose une programmation riche et variée pour satisfaire au mieux vos envies culturelles - programmation que vous pouvez aussi retrouver sur [notre page Facebook](https://www.facebook.com/enscenelyon) !
+
+sections:
+  - title: Spectacle d'Improvisation
+    color: "#ffc62a"
+    date: "16 Novembre à 21h"
+    place: Festive
+    image: http://enscene.org/images/newsletter/affiche-grande-distrib.png
+    content: |
+      Mercredi prochain, c'est soirée ciné ! A la différence près que le projecteur est cassé, que les scripts des films n'ont même pas encore été écrits... parce une **c'est VOUS qui en inventerez les titres** - et serez à juste titre cités aux crédits générique !
+      
+      Tous ce que l'on vous promet, c'est une grande distribution d'acteurs d'une thermofomidable **troupe Stéphannoise** et de vos **subliminaux Improfesseurs** qui tourneront les plus grands chefs d'oeuvre cinémorphiques du XXIème siècle jamais réalisés sans caméra ! Et bien sûr, une **bande son composée en direct** depuis les coulisses par nos impromusicaux locaux. 
+    appendices:
+      - "Retrouvez l'événement [sur Facebook](https://www.facebook.com/events/1626304450997429/)."
+
+  - title: La petite sirène
+    color: "#009999"
+    date: "17, 18 et 19 Novembre à 20h30"
+    place: Kantor
+    image: http://enscene.org/uploads/affiches/56602ae21851b0d5fb5b3db64b76ebaed6c03bd0.jpg
+    content: |
+      Quelque part au fond des mers, trois silhouettes farceuses chantent leur mélopée funeste. Parmi elles, une enfant sans âme et sans amour est prête à subir le sacrifice suprême. Elle débarque sur la terre insensible des hommes…
+
+      *Une création théâtrale sur la base du texte de Marguerite Yourcenar.* 
+    appendices:
+      - "Retrouvez l'événement [sur Facebook](https://www.facebook.com/events/1806696122935297/)."
+      - "Réservez vos places sur Adeline : [17 Nov.](https://ens-lyon.adeline.mobi/event/616/La_Petite_Sirene_17_novembre), [18 Nov.](https://ens-lyon.adeline.mobi/event/617/La_Petite_Sirene_18_novembre) et [19 Nov.](https://ens-lyon.adeline.mobi/event/618/La_Petite_Sirene_19_novembre)."
