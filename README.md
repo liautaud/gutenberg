@@ -5,7 +5,7 @@
 
 ## Présentation.
 
-*Conveyor* est un utilitaire en ligne de commande qui permet de générer automatiquement des diffusions e-mail pour plusieurs associations de l'ENS de Lyon. Il attend en entrée un fichier YAML dont le schéma est décrit ci-dessous, et écrit le code HTML correspondant à l'e-mail généré dans un fichier donné.
+*Gutenberg* est un utilitaire en ligne de commande qui permet de générer automatiquement des diffusions e-mail pour plusieurs associations de l'ENS de Lyon. Il attend en entrée un fichier YAML dont le schéma est décrit ci-dessous, et écrit le code HTML correspondant à l'e-mail généré dans un fichier donné.
 
 ```
 gutenberg 2017-09-15.yml 2017-09-15.html
@@ -21,7 +21,7 @@ python3 -m pip install --user -e .
 
 ## Format d'entrée.
 
-Les fichiers traités par *Conveyor* doivent être au format YAML.
+Les fichiers traités par *Gutenberg* doivent être au format YAML.
 
 Ils doivent contenir les champs suivants :
 - `author` : L'auteur de la diffusion, au format `Prénom Nom <email>`.
