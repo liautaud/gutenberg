@@ -1,4 +1,4 @@
-![Conveyor](http://amaia.at/gutenberg.png)
+![Gutenberg](http://amaia.at/gutenberg.png)
 
 *Un générateur automatique de diffusions pour les associations de l'ENS de Lyon.*
 
