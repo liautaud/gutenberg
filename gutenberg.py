@@ -25,9 +25,7 @@ def main():
 
 
 def parse(source):
-    """
-    Parse and validate the input YAML file.
-    """
+    """ Parse and validate the input YAML file. """
     data = yaml.load(source)
 
     # Conversion functions.
@@ -39,10 +37,12 @@ def parse(source):
 
         return s[start:end]
 
-    def paragraphs(text):
+    def mark(text):
         md = markdown.Markdown()
-        return [strip(md.convert(s))
-                for s in text.splitlines()]
+        return md.convert(text)
+
+    def paragraphs(text):
+        return [strip(mark(s)) for s in text.splitlines()]
 
     # Validate the YAML schema.
     required(data, 'author')
@@ -50,14 +50,14 @@ def parse(source):
     required(data, 'date', date)
     required(data, 'template')
     optional(data, 'greeting')
-    optional(data, 'introduction', paragraphs)
+    optional(data, 'introduction', mark)
     required(data, 'sections.title')
     optional(data, 'sections.color')
     optional(data, 'sections.image')
     optional(data, 'sections.align', ('left', 'right'))
     optional(data, 'sections.date')
     optional(data, 'sections.place')
-    required(data, 'sections.content', paragraphs)
+    required(data, 'sections.content', mark)
     optional(data, 'sections.appendices.*', paragraphs)
     optional(data, 'closing')
 
@@ -107,9 +107,7 @@ def optional(data, name, cast=str, required=False):
 
 
 def render(template, variables={}):
-    """
-    Render the given template using the given variables.
-    """
+    """ Render the given template using the given variables. """
     path = os.path.join(*template.split('.')) + '.html'
     env = jinja2.Environment(
         loader=jinja2.PackageLoader('gutenberg'),

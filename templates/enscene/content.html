@@ -2,9 +2,9 @@
 <p style="font-family: 'Book Antiqua', Arial; font-size: 24px; text-align: justify; font-weight: bold; font-style: italic; margin-top: 20px;">{{ greeting }}</p>
 {% endif %}
 
-{% for text in introduction %}
-<p style="font-family: Arial; font-size: 16px; text-align: justify;">{{ text }}</p>
-{% endfor %}
+<div style="font-family: Arial; font-size: 16px; text-align: justify;">
+{{ introduction }}
+</div>
 
 {% for section in sections %}
 <h1 style="color: white; background: {{ section.color | default('#333') }}; padding: 13px 30px; margin-left: -30px; margin-right: 20px; display: inline-block; font-family: Arial; letter-spacing: -1px; font-weight: normal; font-size: 22px; margin-top: 45px; margin-bottom: 10px; border-radius: 0 3px 3px 0 !important;">
@@ -28,9 +28,9 @@
         {% endif %}
     {% endif %}
 
-    {% for text in section.content %}
-    <p style="font-family: Arial; font-size: 16px; text-align: justify; margin-top: 25px;">{{ text }}</p>
-    {% endfor %}
+    <div style="font-family: Arial; font-size: 16px; text-align: justify;">
+    {{ section.content }}
+    </div>
 
     {% for text in section.appendices %}
     <p style="font-family: Arial; font-size: 16px; text-align: justify; margin-bottom: 0; margin-top: {% if loop.first %}30px;{% else %}0;{% endif %} font-variant: small-caps;">&rarr; {{ text | first }}</p>
