@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+    </head>
+    <body style="margin: 0; padding: 0;">
+        <div style="margin: 0; padding: 0; width: 100%; height: 149px; overflow: hidden; background: #000 url('http://enscene.org/images/newsletter/background-ensortie.png')">
+            <img src="http://enscene.org/images/newsletter/logo-prog.png" alt="Enscène !" />
+            <div style="float: right; text-align: right; font-family: 'Trebuchet MS', Arial; text-transform: uppercase; color: #fff; font-size: 24px; margin-top: 75px; margin-right: 25px; letter-spacing: -1px;">
+                <p style="margin: 0; font-weight: 600;">Diffusion du {{ date.strftime('%d/%m/%Y') }}</p>
+                <p style="margin: 0; font-weight: 100; margin-top: -2px; color: #eee;">{{ title }}</p>
+            </div>
+        </div>
+        <div style="margin: 0; margin-top: 20px; padding: 10px 30px; line-height: 23px;">
+            {% include 'enscene/content.html' %}
+
+            <!-- ....................................... -->
+
+            <h1 style="color: white; background: black; padding: 13px 30px; margin-left: -30px; margin-right: 20px; display: inline-block; font-family: Arial; letter-spacing: -1px; font-weight: normal; font-size: 22px; margin-top: 45px; margin-bottom: 10px; border-radius: 0 3px 3px 0 !important;">
+                // ENSORTIE, QU'EST-CE QUE C'EST ?
+            </h1>
+
+            <p style="font-family: Arial; font-size: 16px; text-align: justify;">ENSortie c'est pour <i>tous</i> les adhérents d'ENScène : c'est un partenariat avec les théâtres de Lyon, qui permet de se rendre chaque mois à des spectacles à l'extérieur de l'ENS, à tarif avantageux. D'autres surprises sont attendues : des rencontres avec des artistes, et quelques visites de coulisses...</p>
+
+            <p style="font-family: 'Book Antiqua', Arial; font-style: italic; font-size: 33px; margin: 28px 0 -15px; text-align: center; letter-spacing: 2px; font-weight: bold; padding: 25px;">A très vite sur ENSortie !</p>
+        </div>
+
+        <p style="border-top: 1px solid #eee; padding: 25px 25px 15px; font-family: monospace; font-size: 12px; text-align: justify;">Vous recevez ce message car vous êtes inscrit sur la liste de diffusion <i>enscene.newsletter</i>, dont vous pouvez vous désabonner à l'adresse <a href="https://listes.ens-lyon.fr/sympa/info/enscene.newsletter">https://listes.ens-lyon.fr/sympa/info/enscene.newsletter</a>. <br /><br />Enscène - Licence : 2-1073444 ; 3-1073445 - Numéro SIRET : 49168683800013</p>
+    </body>
+</html>
