@@ -10,7 +10,7 @@ setup(
     author_email='romain@liautaud.fr',
     license='MIT',
 
-    packages=find_packages(exclude=['tests']),
+    packages=find_packages(exclude=['tests', 'wizard']),
     install_requires=[
         'pyyaml',
         'python-dateutil',
