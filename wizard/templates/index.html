@@ -1,0 +1,265 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Gutenberg - Générateur de diffusions associatives</title>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">
+		<link rel="stylesheet" href="https://unpkg.com/buefy@0.6.3/lib/buefy.min.css">
+		<link rel="stylesheet" href="https://cdn.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
+		<style>
+			html, body {
+				font-family: 'Open Sans', sans-serif;
+				background: #F0F2F4;
+				height: 100%;
+			}
+
+			body {
+				display: flex;
+			}
+
+			main {
+				margin: auto;
+				padding: 20px 0 50px;
+			}
+
+			header {
+				margin-left: -8px;
+			}
+
+			header .subtitle {
+				padding-top: 10px;
+				padding-left: 8px;
+			}
+
+			.is-v-padded {
+				padding-top: 20px;
+				padding-bottom: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<header class="section">
+				<div class="container">
+					<h1 class="title">
+						<img src="../assets/logo.png" alt="Gutenberg">
+					</h1>
+					<h2 class="subtitle">
+						Générateur de diffusions associatives.
+					</h2>
+				</div>
+			</header>
+
+			<transition name="fade" mode="out-in">
+				<div class="container" v-if="landing" key="menu">
+					<div class="columns">
+						<div class="column">
+							<section class="box">
+								<b-field>
+									<b-select
+										placeholder="Créer une nouvelle diffusion"
+										size="is-medium"
+										expanded>
+										<option value="enscene/diffusion">Enscène – Diffusion</option>
+										<option value="enscene/programmation">Enscène – Programmation</option>
+										<option value="enscene/ensortie">Enscène – ENSortie</option>
+									</b-select>
+									<p class="control">
+										<button class="button is-primary is-medium">Créer</button>
+									</p>
+								</b-field>
+							</section>
+						</div>
+
+						<div class="column">
+							<section class="box">
+								<b-field>
+									<b-select
+										placeholder="Charger une diffusion précédente"
+										size="is-medium"
+										expanded>
+										<option value="">01/02/2018 : Programmation de Janvier 2018</option>
+										<option value="">08/02/2018 : Spectacle d'improvisation</option>
+									</b-select>
+									<p class="control">
+										<button class="button is-primary is-medium">Charger</button>
+									</p>
+								</b-field>
+							</section>
+						</div>
+					</div>
+				</div>
+
+				<div class="container" v-else key="editor">
+					<section class="box level">
+						<div class="level-left">
+							<p>Vous créez une nouvelle diffusion suivant le modèle <strong>Enscène – Programmation</strong>.</p>
+						</div>
+						<div class="level-right">
+							<a class="button is-danger is-outlined">Annuler</a>
+						</div>
+					</section>
+
+					<section class="box">
+						<b-field label="Nom de l'auteurice" horizontal>
+							<b-input v-model="yaml.author" required></b-input>
+						</b-field>
+						<b-field label="Nom de la diffusion" horizontal>
+							<b-input v-model="yaml.title" required></b-input>
+						</b-field>
+						<b-field label="Date de la diffusion" horizontal>
+							<b-datepicker
+								v-model="yaml.date"
+								placeholder="Cliquez pour choisir une date"
+								icon="calendar-today">
+							</b-datepicker>
+						</b-field>
+
+						<hr>
+
+						<b-field label="Formule de politesse" horizontal>
+							<b-input v-model="yaml.greeting" required></b-input>
+						</b-field>
+						<b-field label="Introduction" horizontal>
+							<markdown-editor v-model="yaml.introduction"></markdown-editor>
+						</b-field>
+						
+						<hr>
+						
+						<b-collapse class="panel" v-for="section in yaml.sections">
+							<div slot="trigger" class="panel-heading level">
+								<div class="level-left">
+									<strong>{{ section.title }}</strong>
+								</div>
+								<div class="level-right">
+									<a class="button is-medium">
+										<b-icon icon="delete"></b-icon>
+									</a>
+								</div>
+							</div>
+							<div class="panel-block">
+								<div class="container is-v-padded">
+									<b-field label="Titre de la section" horizontal>
+										<b-input v-model="section.title" required></b-input>
+									</b-field>
+									<b-field label="Date de l'événement" horizontal grouped>
+										<b-datepicker
+											v-model="section.date"
+											placeholder="Cliquez pour choisir une date"
+											icon="calendar-today">
+										</b-datepicker>
+										<b-timepicker
+											placeholder="Cliquez pour choisir une heure"
+											icon="clock"
+											:readonly="false">
+										</b-timepicker>
+									</b-field>
+									<b-field label="Lieu de l'événement" horizontal>
+										<b-input v-model="section.place"></b-input>
+									</b-field>
+
+									<b-field label="Contenu de la section" horizontal>
+										<markdown-editor v-model="section.content"></markdown-editor>
+									</b-field>
+								</div>
+							</div>
+						</b-collapse>
+
+						<b-field grouped position="is-right">
+					        <p class="control">
+								<button class="button is-medium">
+									<span>Ajouter une section</span>
+									<b-icon icon="plus"></b-icon>
+								</button>
+							</p>
+						</b-field>
+
+						<hr>
+
+						<b-field grouped position="is-centered">
+					        <p class="control">
+								<button class="button is-primary is-medium">Prévisualiser</button>
+							</p>
+					        <p class="control">
+								<button class="button is-primary is-medium">Sauvegarder</button>
+							</p>
+						</b-field>
+					</section>
+				</div>
+			</transition>
+		</main>
+
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+		<script src="https://unpkg.com/buefy@0.6.3/lib/index.js"></script>
+		<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+
+		<script>
+			Vue.use(Buefy.default)
+
+			Vue.component('markdown-editor', {
+				template: '<textarea ref="editor"></textarea>',
+				props: ['value'],
+
+				data() {
+					return { editor: null }
+				},
+				
+				mounted() {
+					this.editor = new SimpleMDE({
+						element: this.$refs.editor,
+						forceSync: true,
+						spellChecker: false,
+						initialValue: this.value
+					})
+
+					this.editor.codemirror.on('change', _ => {
+						this.$emit('input', this.editor.value())
+					})
+				},
+
+				destroyed() {
+					this.editor.toTextArea()
+					this.editor = null
+				},
+
+				// watch: {
+				// 	value(val, old) {
+				// 		this.editor.value(val)
+				// 	}
+				// }
+			})
+
+			let app = new Vue({
+				el: 'main',
+				data: {
+					landing: false,
+					yaml: {
+						author: null,
+						title: null,
+						date: null,
+						greeting: 'Chers adhérent·e·s,',
+						introduction: 'bjr',
+						sections: [
+							{
+								title: 'Truc 1',
+								date: null,
+								place: null,
+								image: null,
+								content: null,
+							},
+							{
+								title: 'Truc 2',
+								date: null,
+								place: null,
+								image: null,
+								content: null,
+							},
+						]
+					}
+				},
+			})
+		</script>
+	</body>
+</html>
