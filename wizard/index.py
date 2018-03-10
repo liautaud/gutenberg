@@ -49,12 +49,9 @@ def saves():
     return jsonify({get_name(path): get_content(path) for path in paths})
 
 
-@app.route('/preview', methods=['GET', 'POST'])
+@app.route('/render', methods=['POST'])
 def preview():
-    """Display a HTML preview for a given diffusion object."""
-    if 'data' not in request.form:
-        return send_from_directory('templates', 'preview.html')
-
-    data = parse(json.loads(request.form['data']))
+    """Display a HTML rendering for a given source."""
+    data = parse(request.json)
     _, source_relpath = get_template(data['template'])
     return render(source_relpath, data)

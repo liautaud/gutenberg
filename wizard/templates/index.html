@@ -69,6 +69,14 @@
 				<iframe class="preview" frameborder="0" ref="previewFrame"></iframe>
 			</b-modal>
 
+			<b-modal :active.sync="htmlActive" :width="1100">
+				<div class="box">
+					<h3 class="title is-4">Code source HTML</h3>
+					<h4 class="subtitle">À copier/coller dans le webmail.</h4>
+					<pre>{{ htmlContent }}</pre>
+				</div>
+			</b-modal>
+
 			<transition name="fade" mode="out-in">				
 				<div class="container" v-if="!current" key="menu">
 					<div class="columns">
@@ -283,6 +291,17 @@
 				]
 			}
 
+			const postJson = (url, data) =>
+				fetch(url, {
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					method: 'POST',
+					body: JSON.stringify(data)
+				})
+				.then(res => res.text())
+
 			let app = new Vue({
 				el: 'main',
 
@@ -296,7 +315,8 @@
 					current: null,
 
 					previewActive: false,
-					previewContent: null,
+					htmlActive: false,
+					htmlContent: null,
 				},
 
 				mounted() {
@@ -330,28 +350,30 @@
 					preview() {
 						this.previewActive = true
 
-						Vue.nextTick().then(() => {
-							this.$refs.previewFrame.addEventListener('load', onFormLoad)
-							this.$refs.previewFrame.src = '/preview'
-						})
-
-						let onFormLoad = _ => {
-							this.$refs.previewFrame.removeEventListener('load', onFormLoad)
-
+						postJson('/render', this.current).then(text => {
 							let previewDocument = (
 								this.$refs.previewFrame.contentDocument || 
 								this.$refs.previewFrame.contentWindow.document)
 
-							let previewData = previewDocument.getElementsByTagName('input')[0]
-							let previewForm = previewDocument.getElementsByTagName('form')[0]
-
-							previewData.value = JSON.stringify(this.current)
-							previewForm.submit()
-						}
+							previewDocument
+								.getElementsByTagName('html')[0]
+								.innerHTML = text
+						})
 					},
 
 					html() {
+						this.htmlActive = true
 
+						postJson('/render', this.current).then(text => {
+							// We use the DOM to isolate the contents of the body,
+							// because we want the user to copy that to the webmail
+							// instead of the entire HTML output.
+							let virtualDom = document.createElement('html')
+							virtualDom.innerHTML = text
+
+							let virtualBody = virtualDom.getElementsByTagName('body')[0]
+							this.htmlContent = virtualBody.innerHTML
+						})
 					},
 
 					save() {
