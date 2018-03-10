@@ -194,10 +194,12 @@
 
 						<b-field grouped position="is-centered">
 					        <p class="control">
-								<button class="button is-primary is-medium is-outlined">Prévisualiser</button>
+								<button class="button is-primary is-medium is-outlined"
+									@click="preview">Prévisualiser</button>
 							</p>
 					        <p class="control">
-								<button class="button is-primary is-medium">Sauvegarder</button>
+								<button class="button is-primary is-medium"
+									@click="save">Sauvegarder</button>
 							</p>
 						</b-field>
 					</section>
@@ -314,6 +316,22 @@
 						this.selectedTemplate = null
 						this.selectedSave = null
 						this.current = null
+					},
+
+					preview() {
+						fetch('/preview', {
+							headers: {
+								'Accept': 'application/json',
+								'Content-Type': 'application/json'
+							},
+							method: 'POST',
+							body: JSON.stringify(this.current)
+						})
+						.then(console.log)
+					},
+
+					save() {
+
 					}
 				}
 			})

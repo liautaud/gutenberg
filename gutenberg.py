@@ -31,19 +31,19 @@ def get_template(template_name):
     Return the (descriptor, source_relpath) tuple for a given
     template name (e.g. `enscene.ensortie`).
     """
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    templates_dir = os.path.join(base_dir, 'templates')
+
     parts = template_name.split('.')
-    desc_folder = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
-        'templates',
-        *parts[:-1])
+    desc_dir = os.path.join(templates_dir, *parts[:-1])
     desc_file = parts[-1] + '.yml'
-    desc_path = os.path.join(desc_folder, desc_file)
+    desc_path = os.path.join(desc_dir, desc_file)
 
     with open(desc_path) as desc_file:
         desc = yaml.load(desc_file)
 
-    source_path = os.path.join(desc_folder, desc['source'])
-    source_relpath = os.path.relpath(source_path, 'templates')
+    source_path = os.path.join(desc_dir, desc['source'])
+    source_relpath = os.path.relpath(source_path, templates_dir)
 
     return (desc, source_relpath)
 
