@@ -7,7 +7,7 @@ import jinja2
 
 
 def main():
-    """ Entrypoint for the `gutenberg` command-line utility. """
+    """Entrypoint for the `gutenberg` command-line utility."""
     parser = argparse.ArgumentParser(
         description='Génère des diffusions au format HTML.')
 
@@ -18,14 +18,38 @@ def main():
 
     args = parser.parse_args()
     parsed = parse(args.source)
-    output = render(parsed['template'], parsed)
+
+    descriptor, source_relpath = get_template(args.source['template'])
+    output = render(source_relpath, parsed)
 
     with open(args.target, 'w') as target:
         target.write(output)
 
 
+def get_template(template_name):
+    """
+    Return the (descriptor, source_relpath) tuple for a given
+    template name (e.g. `enscene.ensortie`).
+    """
+    parts = template_name.split('.')
+    desc_folder = os.path.join(
+        os.path.dirname(os.path.realpath(__file__)),
+        'templates',
+        *parts[:-1])
+    desc_file = parts[-1] + '.yml'
+    desc_path = os.path.join(desc_folder, desc_file)
+
+    with open(desc_path) as desc_file:
+        desc = yaml.load(desc_file)
+
+    source_path = os.path.join(desc_folder, desc['source'])
+    source_relpath = os.path.relpath(source_path, 'templates')
+
+    return (desc, source_relpath)
+
+
 def parse(source):
-    """ Parse and validate the input YAML file. """
+    """Parse and validate the input YAML file."""
     data = yaml.load(source)
 
     # Conversion functions.
@@ -43,6 +67,10 @@ def parse(source):
 
     def paragraphs(text):
         return [strip(mark(s)) for s in text.splitlines()]
+
+    # TODO(liautaud):
+    # Remove the previous validation routine, and replace it with
+    # data from the new template description files.
 
     # Validate the YAML schema.
     required(data, 'author')
@@ -71,7 +99,7 @@ def required(data, name, cast=str):
 
 def optional(data, name, cast=str, required=False):
     """
-    Checks whether `data` contains the field `name`, and casts
+    Check whether `data` contains the field `name`, and cast
     the field using a given function if necessary.
     """
     parts = name.split('.', 1)
@@ -106,9 +134,8 @@ def optional(data, name, cast=str, required=False):
     return None
 
 
-def render(template, variables={}):
-    """ Render the given template using the given variables. """
-    path = os.path.join(*template.split('.')) + '.html'
+def render(path, variables={}):
+    """Render the given template using the given variables."""
     env = jinja2.Environment(
         loader=jinja2.PackageLoader('gutenberg'),
         trim_blocks=True,

@@ -1,0 +1,44 @@
+title: Enscène – ENSortie
+source: ensortie.html
+
+fields:
+  greeting:
+    name: Formule de politesse
+    type: text
+  introduction:
+    name: Introduction
+    type: markdown
+    required: true
+  sections:
+    type: list
+    items:
+      title:
+        name: Titre de la section
+        type: text
+        required: true
+      color:
+        name: Couleur de la section
+        type: color
+      image:
+        name: Image de la section
+        type: image
+      align:
+        name: Position de l'image
+        type: choice
+        choices:
+          left: Gauche du texte
+          right: Droite du texte
+      date:
+        name: Date de l'événement
+        type: datetime
+      place:
+        name: Lieu de l'événement
+        type: text
+      content:
+        name: Contenu de la section
+        type: markdown
+        required: true
+      appendices:
+        name: Annexes de la section
+        type: list
+        items: paragraphs
