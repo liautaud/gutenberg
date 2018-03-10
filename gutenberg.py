@@ -19,7 +19,7 @@ def main():
     args = parser.parse_args()
     parsed = parse(args.source)
 
-    descriptor, source_relpath = get_template(args.source['template'])
+    descriptor, source_relpath = get_template(parsed['template'])
     output = render(source_relpath, parsed)
 
     with open(args.target, 'w') as target:

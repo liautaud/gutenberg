@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import send_from_directory, jsonify
-from .. import get_template
+from .. import render, get_template
 
 import glob
 import os.path
@@ -43,3 +43,7 @@ def saves():
 
     paths = glob.glob('storage/*.yml')
     return jsonify({get_name(path): get_content(path) for path in paths})
+
+@app.post('/preview')
+def preview():
+    """Display a HTML preview for a given diffusion object."""
