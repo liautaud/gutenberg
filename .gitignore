@@ -100,5 +100,10 @@ ENV/
 # mypy
 .mypy_cache/
 
+# npm packages
+node_modules/
+package-lock.json
+wizard/static/build.js
+
 # Examples
 examples/

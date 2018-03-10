@@ -1,0 +1,29 @@
+{
+  "name": "gutenberg-wizard",
+  "version": "1.0.0",
+  "description": "Une interface web pour Gutenberg.",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack --mode development --progress --hide-modules",
+    "watch": "webpack --mode development --progress --hide-modules --watch",
+    "release": "webpack --mode production --progress --hide-modules",
+    "package": "npm run release && tar -zcvf `basename $PWD`.tar.gz * --exclude=src --exclude=node_modules --exclude=.git",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liautaud/gutenberg.git"
+  },
+  "author": "Romain Liautaud <romain@liautaud.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liautaud/gutenberg/issues"
+  },
+  "homepage": "https://github.com/liautaud/gutenberg#readme",
+  "devDependencies": {
+    "vue-loader": "^14.2.1",
+    "vue-template-compiler": "^2.5.14",
+    "webpack": "^4.1.1",
+    "webpack-cli": "^2.0.11"
+  }
+}
