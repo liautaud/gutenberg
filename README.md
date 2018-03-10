@@ -52,10 +52,10 @@ Chaque section contient en général les champs suivants :
 Gutenberg utilise un système de modèles (ou `templates`) pour générer du code HTML à partir des données d'entrée.
 
 Plus précisément, pour chaque modèle, Gutenberg attends deux fichiers :
-- Un fichier de *description de modèle*, en YAML.
+- Un fichier de *description de modèle*, en YAML.  
   Celui-ci liste notamment l'ensemble des champs attendus par le modèle, ainsi que leur type.
 
-- Un fichier *source*, qui utilise la syntaxe de [Jinja2](http://jinja.pocoo.org/docs/2.10/).
+- Un fichier *source*, qui utilise la syntaxe de [Jinja2](http://jinja.pocoo.org/docs/2.10/).  
   Celui-ci contient le code HTML à générer en fonction des champs passés en entrée.
 
 Plusieurs exemples se trouvent dans le dossier `templates`.
