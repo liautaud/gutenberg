@@ -44,7 +44,7 @@
 			<header class="section">
 				<div class="container">
 					<h1 class="title">
-						<img src="../assets/logo.png" alt="Gutenberg">
+						<img src="/static/logo.png" alt="Gutenberg">
 					</h1>
 					<h2 class="subtitle">
 						Générateur de diffusions associatives.
@@ -52,22 +52,28 @@
 				</div>
 			</header>
 
-			<transition name="fade" mode="out-in">
-				<div class="container" v-if="landing" key="menu">
+			<b-loading :active.sync="loading"></b-loading>
+
+			<transition name="fade" mode="out-in">				
+				<div class="container" v-if="!current" key="menu">
 					<div class="columns">
 						<div class="column">
 							<section class="box">
 								<b-field>
 									<b-select
+										v-model="selectedTemplate"
 										placeholder="Créer une nouvelle diffusion"
 										size="is-medium"
 										expanded>
-										<option value="enscene/diffusion">Enscène – Diffusion</option>
-										<option value="enscene/programmation">Enscène – Programmation</option>
-										<option value="enscene/ensortie">Enscène – ENSortie</option>
+										<option
+											v-for="template, name in templates"
+											:key="name"
+											:value="name">
+											{{ template.title }}
+										</option>
 									</b-select>
 									<p class="control">
-										<button class="button is-primary is-medium">Créer</button>
+										<button class="button is-primary is-medium" @click="create">Créer</button>
 									</p>
 								</b-field>
 							</section>
@@ -77,14 +83,19 @@
 							<section class="box">
 								<b-field>
 									<b-select
+										v-model="selectedSave"
 										placeholder="Charger une diffusion précédente"
 										size="is-medium"
 										expanded>
-										<option value="">01/02/2018 : Programmation de Janvier 2018</option>
-										<option value="">08/02/2018 : Spectacle d'improvisation</option>
+										<option
+											v-for="save, name in saves"
+											:key="name"
+											:value="name">
+											{{ save.title }}
+										</option>
 									</b-select>
 									<p class="control">
-										<button class="button is-primary is-medium">Charger</button>
+										<button class="button is-primary is-medium" @click="load">Charger</button>
 									</p>
 								</b-field>
 							</section>
@@ -94,24 +105,27 @@
 
 				<div class="container" v-else key="editor">
 					<section class="box level">
-						<div class="level-left">
-							<p>Vous créez une nouvelle diffusion suivant le modèle <strong>Enscène – Programmation</strong>.</p>
+						<div class="level-left" v-if="selectedTemplate">
+							<p>Vous écrivez une nouvelle diffusion selon le modèle <strong>{{ templates[selectedTemplate].title }}</strong>.</p>
+						</div>
+						<div class="level-left" v-else-if="selectedSave">
+							<p>Vous modifiez la diffusion <strong>{{ saves[selectedSave].title }}</strong>.</p>
 						</div>
 						<div class="level-right">
-							<a class="button is-danger is-outlined">Annuler</a>
+							<a class="button is-danger is-outlined" @click="reset">Annuler</a>
 						</div>
 					</section>
 
 					<section class="box">
 						<b-field label="Nom de l'auteurice" horizontal>
-							<b-input v-model="yaml.author" required></b-input>
+							<b-input v-model="current.author" required></b-input>
 						</b-field>
 						<b-field label="Nom de la diffusion" horizontal>
-							<b-input v-model="yaml.title" required></b-input>
+							<b-input v-model="current.title" required></b-input>
 						</b-field>
 						<b-field label="Date de la diffusion" horizontal>
 							<b-datepicker
-								v-model="yaml.date"
+								v-model="current.date"
 								placeholder="Cliquez pour choisir une date"
 								icon="calendar-today">
 							</b-datepicker>
@@ -120,15 +134,15 @@
 						<hr>
 
 						<b-field label="Formule de politesse" horizontal>
-							<b-input v-model="yaml.greeting" required></b-input>
+							<b-input v-model="current.greeting" required></b-input>
 						</b-field>
 						<b-field label="Introduction" horizontal>
-							<markdown-editor v-model="yaml.introduction"></markdown-editor>
+							<markdown-editor v-model="current.introduction"></markdown-editor>
 						</b-field>
 						
 						<hr>
 						
-						<b-collapse class="panel" v-for="section in yaml.sections">
+						<b-collapse class="panel" v-for="section in current.sections">
 							<div slot="trigger" class="panel-heading level">
 								<div class="level-left">
 									<strong>{{ section.title }}</strong>
@@ -180,7 +194,7 @@
 
 						<b-field grouped position="is-centered">
 					        <p class="control">
-								<button class="button is-primary is-medium">Prévisualiser</button>
+								<button class="button is-primary is-medium is-outlined">Prévisualiser</button>
 							</p>
 					        <p class="control">
 								<button class="button is-primary is-medium">Sauvegarder</button>
@@ -231,34 +245,77 @@
 				// }
 			})
 
+			const template = {
+				author: null,
+				title: null,
+				date: null,
+				greeting: 'Chers adhérent·e·s,',
+				introduction: 'bjr',
+				sections: [
+					{
+						title: 'Truc 1',
+						date: null,
+						place: null,
+						image: null,
+						content: null,
+					},
+					{
+						title: 'Truc 2',
+						date: null,
+						place: null,
+						image: null,
+						content: null,
+					},
+				]
+			}
+
 			let app = new Vue({
 				el: 'main',
+
 				data: {
-					landing: false,
-					yaml: {
-						author: null,
-						title: null,
-						date: null,
-						greeting: 'Chers adhérent·e·s,',
-						introduction: 'bjr',
-						sections: [
-							{
-								title: 'Truc 1',
-								date: null,
-								place: null,
-								image: null,
-								content: null,
-							},
-							{
-								title: 'Truc 2',
-								date: null,
-								place: null,
-								image: null,
-								content: null,
-							},
-						]
+					templates: null,
+					saves: null,
+
+					selectedTemplate: null,
+					selectedSave: null,
+
+					current: null
+				},
+
+				mounted() {
+					fetch('/templates')
+						.then(res => res.json())
+						.then(data => this.templates = data)
+
+					fetch('/saves')
+						.then(res => res.json())
+						.then(data => this.saves = data)
+				},
+
+				computed: {
+					loading() {
+						return !this.templates || !this.saves
 					}
 				},
+
+				methods: {
+					create() {
+						this.selectedSave = null
+						this.current = template
+					},
+
+					load() {
+						this.selectedTemplate = null
+						this.current = this.saves[this.selectedSave]
+					},
+
+					reset() {
+						// TODO(liautaud): Add a modal?
+						this.selectedTemplate = null
+						this.selectedSave = null
+						this.current = null
+					}
+				}
 			})
 		</script>
 	</body>
