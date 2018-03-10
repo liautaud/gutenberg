@@ -3,11 +3,12 @@ from flask import request
 from flask import send_from_directory
 from flask import jsonify
 
-from .. import render, get_template
+from .. import parse, render, get_template
 
 import glob
 import os.path
 import yaml
+import json
 
 app = Flask(__name__)
 
@@ -48,9 +49,12 @@ def saves():
     return jsonify({get_name(path): get_content(path) for path in paths})
 
 
-@app.route('/preview', methods=['POST'])
+@app.route('/preview', methods=['GET', 'POST'])
 def preview():
     """Display a HTML preview for a given diffusion object."""
-    data = request.get_json()
+    if 'data' not in request.form:
+        return send_from_directory('templates', 'preview.html')
+
+    data = parse(json.loads(request.form['data']))
     _, source_relpath = get_template(data['template'])
     return render(source_relpath, data)

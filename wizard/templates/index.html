@@ -37,6 +37,17 @@
 				padding-top: 20px;
 				padding-bottom: 20px;
 			}
+
+			.preview {
+				border-radius: 10px;
+				width: 1100px;
+				height: 600px;
+				background: #fff;
+			}
+
+			.modal-content {
+				width: 1100px !important;
+			}
 		</style>
 	</head>
 	<body>
@@ -52,7 +63,11 @@
 				</div>
 			</header>
 
-			<b-loading :active.sync="loading"></b-loading>
+			<b-loading :active="!templates || !saves"></b-loading>
+
+			<b-modal :active.sync="previewActive" :width="1100">
+				<iframe class="preview" frameborder="0" ref="previewFrame"></iframe>
+			</b-modal>
 
 			<transition name="fade" mode="out-in">				
 				<div class="container" v-if="!current" key="menu">
@@ -123,13 +138,13 @@
 						<b-field label="Nom de la diffusion" horizontal>
 							<b-input v-model="current.title" required></b-input>
 						</b-field>
-						<b-field label="Date de la diffusion" horizontal>
+						<!-- <b-field label="Date de la diffusion" horizontal>
 							<b-datepicker
 								v-model="current.date"
 								placeholder="Cliquez pour choisir une date"
 								icon="calendar-today">
 							</b-datepicker>
-						</b-field>
+						</b-field> -->
 
 						<hr>
 
@@ -158,7 +173,7 @@
 									<b-field label="Titre de la section" horizontal>
 										<b-input v-model="section.title" required></b-input>
 									</b-field>
-									<b-field label="Date de l'événement" horizontal grouped>
+									<!-- <b-field label="Date de l'événement" horizontal grouped>
 										<b-datepicker
 											v-model="section.date"
 											placeholder="Cliquez pour choisir une date"
@@ -169,7 +184,7 @@
 											icon="clock"
 											:readonly="false">
 										</b-timepicker>
-									</b-field>
+									</b-field> -->
 									<b-field label="Lieu de l'événement" horizontal>
 										<b-input v-model="section.place"></b-input>
 									</b-field>
@@ -182,7 +197,7 @@
 						</b-collapse>
 
 						<b-field grouped position="is-right">
-					        <p class="control">
+							<p class="control">
 								<button class="button is-medium">
 									<span>Ajouter une section</span>
 									<b-icon icon="plus"></b-icon>
@@ -193,11 +208,15 @@
 						<hr>
 
 						<b-field grouped position="is-centered">
-					        <p class="control">
+							<p class="control">
 								<button class="button is-primary is-medium is-outlined"
 									@click="preview">Prévisualiser</button>
 							</p>
-					        <p class="control">
+							<p class="control">
+								<button class="button is-primary is-medium is-outlined"
+									@click="html">Récupérer le HTML</button>
+							</p>
+							<p class="control">
 								<button class="button is-primary is-medium"
 									@click="save">Sauvegarder</button>
 							</p>
@@ -239,12 +258,6 @@
 					this.editor.toTextArea()
 					this.editor = null
 				},
-
-				// watch: {
-				// 	value(val, old) {
-				// 		this.editor.value(val)
-				// 	}
-				// }
 			})
 
 			const template = {
@@ -260,8 +273,7 @@
 						place: null,
 						image: null,
 						content: null,
-					},
-					{
+					}, {
 						title: 'Truc 2',
 						date: null,
 						place: null,
@@ -281,7 +293,10 @@
 					selectedTemplate: null,
 					selectedSave: null,
 
-					current: null
+					current: null,
+
+					previewActive: false,
+					previewContent: null,
 				},
 
 				mounted() {
@@ -292,12 +307,6 @@
 					fetch('/saves')
 						.then(res => res.json())
 						.then(data => this.saves = data)
-				},
-
-				computed: {
-					loading() {
-						return !this.templates || !this.saves
-					}
 				},
 
 				methods: {
@@ -319,15 +328,30 @@
 					},
 
 					preview() {
-						fetch('/preview', {
-							headers: {
-								'Accept': 'application/json',
-								'Content-Type': 'application/json'
-							},
-							method: 'POST',
-							body: JSON.stringify(this.current)
+						this.previewActive = true
+
+						Vue.nextTick().then(() => {
+							this.$refs.previewFrame.addEventListener('load', onFormLoad)
+							this.$refs.previewFrame.src = '/preview'
 						})
-						.then(console.log)
+
+						let onFormLoad = _ => {
+							this.$refs.previewFrame.removeEventListener('load', onFormLoad)
+
+							let previewDocument = (
+								this.$refs.previewFrame.contentDocument || 
+								this.$refs.previewFrame.contentWindow.document)
+
+							let previewData = previewDocument.getElementsByTagName('input')[0]
+							let previewForm = previewDocument.getElementsByTagName('form')[0]
+
+							previewData.value = JSON.stringify(this.current)
+							previewForm.submit()
+						}
+					},
+
+					html() {
+
 					},
 
 					save() {

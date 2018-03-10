@@ -17,7 +17,8 @@ def main():
                         help='Le chemin du fichier HTML à générer.')
 
     args = parser.parse_args()
-    parsed = parse(args.source)
+    data = yaml.load(args.source)
+    parsed = parse(data)
 
     descriptor, source_relpath = get_template(parsed['template'])
     output = render(source_relpath, parsed)
@@ -48,11 +49,8 @@ def get_template(template_name):
     return (desc, source_relpath)
 
 
-def parse(source):
-    """Parse and validate the input YAML file."""
-    data = yaml.load(source)
-
-    # Conversion functions.
+def parse(data):
+    """Parse and validate the input data."""
     date = dateutil.parser.parse
 
     def strip(s):
@@ -130,6 +128,10 @@ def optional(data, name, cast=str, required=False):
                 (name, ' ou '.join(cast), value))
 
     data[name] = cast(value)
+
+    # TODO(liautaud):
+    # print('CASTED data[%s] from %s into %s' %
+    #       (name, repr(value), repr(cast(value))))
 
     return None
 
