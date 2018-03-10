@@ -1,28 +1,31 @@
 <template>
 	<b-field :label="field.name" horizontal>
-		<!-- Text field -->
-		<b-input
-			v-if="field.type == 'text'"
+		<component :is="components[field.type]"
 			:required="field.required"
 			v-model="contents[field.id]">
-		</b-input>
-
-		<!-- Markdown field -->
-		<markdown-editor
-			v-else-if="field.type == 'markdown'"
-			:required="field.required"
-			v-model="contents[field.id]">
-		</markdown-editor>
-
-		<!-- TODO(liautaud): Implement more field types. -->
+		</component>
 	</b-field>
 </template>
 
 <script>
 	import MarkdownEditor from './MarkdownEditor'
+	const Swatches = window.VueSwatches.default
 
 	export default {
 		props: ['field', 'contents'],
-		components: { MarkdownEditor }
+
+		computed: {
+			components() {
+				return {
+					'text': 'b-input',
+					'markdown': MarkdownEditor,
+					'color': Swatches,
+					'image': 'b-input',    // TODO(liautaud)
+					'choice': 'b-input',   // TODO(liautaud)
+					'datetime': 'b-input', // TODO(liautaud)
+					'list': 'b-input',     // TODO(liautaud)
+				}
+			}
+		}
 	}
 </script>

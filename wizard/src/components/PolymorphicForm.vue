@@ -15,8 +15,5 @@
 	export default {
 		props: ['fields', 'contents'],
 		components: { PolymorphicField },
-		mounted() {
-			console.log(this.fields)
-		}
 	}
 </script>

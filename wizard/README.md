@@ -5,7 +5,7 @@
 
 ## Présentation.
 
-Le module `gutenberg/wizard` est une interface web pour simplifier l'utilisation de Gutenberg. 
+Le module `gutenberg.wizard` est une interface web pour simplifier l'utilisation de Gutenberg. 
 
 Elle utilise Flask et Bulma, et permet de générer automatiquement les fichiers YAML et HTML à partir d'une entrée de formulaire.
 
