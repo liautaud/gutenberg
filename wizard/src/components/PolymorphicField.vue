@@ -8,8 +8,10 @@
 </template>
 
 <script>
-	import MarkdownEditor from './MarkdownEditor'
 	const Swatches = window.VueSwatches.default
+
+	import MarkdownInput from './MarkdownInput'
+	import DatetimeInput from './DatetimeInput'
 
 	export default {
 		props: ['field', 'contents'],
@@ -18,11 +20,11 @@
 			components() {
 				return {
 					'text': 'b-input',
-					'markdown': MarkdownEditor,
+					'markdown': MarkdownInput,
+					'datetime': DatetimeInput,
 					'color': Swatches,
 					'image': 'b-input',    // TODO(liautaud)
 					'choice': 'b-input',   // TODO(liautaud)
-					'datetime': 'b-input', // TODO(liautaud)
 					'list': 'b-input',     // TODO(liautaud)
 				}
 			}

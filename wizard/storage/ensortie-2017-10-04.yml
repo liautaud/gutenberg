@@ -16,7 +16,7 @@ introduction: |
 
 sections:
   - title: Ubu Roi
-    date: Mercredi 11 Octobre à 20h
+    date: 2017-10-11 20:00
     place: TNP (Lyon 8ème)
     image: "https://www.tnp-villeurbanne.com/cms/wp-content/gallery/15-16-ubu-photos-spectacles/IMG_9920.jpg"
     content: |
@@ -34,7 +34,7 @@ sections:
       - "[Réservez votre place en ligne](https://ens-lyon.adeline.mobi/event/925/ENSortie:%20Ubu%20roi%20(ou%20presque))."
 
   - title: "Cirkus Cirkor : Limits"
-    date: Jeudi 19 Octobre à 20h30
+    date: 2017-10-19 20:30
     place: Maison de la Danse (Lyon 12ème)
     image: "https://1.bp.blogspot.com/-BjaeszvRFcQ/WDIVpfaUPWI/AAAAAAAAGNE/yxrVPF-RJXgS8eKz0qn4MA5OPzn9Awx_gCLcB/s1600/Mattias%2BEdwall.jpg"
     content: |
@@ -51,7 +51,7 @@ sections:
       - "**Attention : les places sont à retirer lors de la permanence Ensortie d’Enscène, le mardi de 12h à 14h au RU Descartes. En cas d’impossibilité, contacter [aurore.flamion@enscene.org](mailto:aurore.flamion@enscene.org).**"
 
   - title: "Mujer Vertical"
-    date: Vendredi 20 Octobre à 20h
+    date: 2017-10-20 20:00
     place: Théâtre de la Renaissance (Lyon 12ème)
     image: "https://www.theatrelarenaissance.com/wp-content/uploads/2017/05/2.Mujer-Vertical-c-Eric-Masse%C2%A6u.jpg"
     content: |
@@ -68,7 +68,7 @@ sections:
       - "[Réservez votre place en ligne](https://ens-lyon.adeline.mobi/event/931/ENSortie:%20Mujer%20Vertical(Sens%20Interdits))."
 
   - title: "La Mission (Souvenir d’une révolution)"
-    date: Dimanche 29 Octobre à 16h
+    date: 2017-10-29 16:00
     place: Théâtre des Célestins (Lyon 9ème)
     image: "https://www.theatredescelestins.com/wp-content/uploads/2017/05/la-mission-2-900x600.jpg"
     content: |
