@@ -103,7 +103,7 @@ def optional(data, name, cast=str, required=False):
     parts = name.split('.', 1)
     name = parts[0]
 
-    if name not in data:
+    if name not in data or data[name] is None:
         if required and not len(parts) > 1:
             raise Exception(
                 'Le champ %s est manquant' % (name))

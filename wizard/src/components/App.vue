@@ -94,13 +94,13 @@
 					<b-field label="Nom de la diffusion" horizontal>
 						<b-input v-model="contents.title" required></b-input>
 					</b-field>
-					<!-- <b-field label="Date de la diffusion" horizontal>
+					<b-field label="Date de la diffusion" horizontal>
 						<b-datepicker
 							v-model="contents.date"
 							placeholder="Cliquez pour choisir une date"
 							icon="calendar-today">
 						</b-datepicker>
-					</b-field> -->
+					</b-field>
 
 					<hr>
 
@@ -181,6 +181,44 @@
 		})
 		.then(res => res.text())
 
+	/**
+	 * Cast the data in the saves to match their expected types.
+	 */
+	const castSaves = (saves, templates) => {
+		const metaFields = [
+			{ id: 'title', type: 'text' },
+			{ id: 'author', type: 'text' },
+			{ id: 'date', type: 'date' },
+		]
+
+		const castField = (container, field) => {
+			if (!field.required &&
+				typeof container[field.id] == 'undefined') {
+				container[field.id] = null
+			}
+
+			if (field.type == 'date') {
+				container[field.id] = new Date(container[field.id])
+			}
+		}
+
+		for (let id in saves) {
+			let save = saves[id]
+			let template = templates[save.template]
+
+			for (let field of metaFields)
+				castField(save, field)
+
+			for (let field of template.root)
+				castField(save, field)
+
+			save.sections.forEach(section => {
+				for (let field of template.sections)
+					castField(section, field)
+			})
+		}
+	}
+
 	export default {
 		components: { PolymorphicForm },
 
@@ -212,11 +250,15 @@
 		mounted() {
 			fetch('/templates')
 				.then(res => res.json())
-				.then(data => this.templates = data)
-
-			fetch('/saves')
+				.then(data => {
+					this.templates = data
+					return fetch('/saves')
+				})
 				.then(res => res.json())
-				.then(data => this.saves = data)
+				.then(data => {
+					castSaves(data, this.templates)
+					this.saves = data
+				})
 		},
 
 		methods: {
