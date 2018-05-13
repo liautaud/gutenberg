@@ -182,15 +182,18 @@
 		.then(res => res.text())
 
 	/**
-	 * Cast the data in the saves to match their expected types.
+	 * The fields which are defined implicitely for every template.
 	 */
-	const castSaves = (saves, templates) => {
-		const metaFields = [
-			{ id: 'title', type: 'text' },
-			{ id: 'author', type: 'text' },
-			{ id: 'date', type: 'date' },
-		]
+	const metaFields = [
+		{ id: 'title', type: 'text' },
+		{ id: 'author', type: 'text' },
+		{ id: 'date', type: 'date' },
+	]
 
+	/**
+	 * Cast the data in a save to match the type expected by its template.
+	 */
+	const castSave = (save, template) => {
 		const castField = (container, field) => {
 			if (!field.required &&
 				typeof container[field.id] == 'undefined') {
@@ -202,21 +205,45 @@
 			}
 		}
 
+		for (let field of metaFields)
+			castField(save, field)
+
+		for (let field of template.root)
+			castField(save, field)
+
+		save.sections.forEach(section => {
+			for (let field of template.sections)
+				castField(section, field)
+		})
+	}
+
+	/**
+	 * Apply the castSave function to a set of saves and templates.
+	 */
+	const castSaves = (saves, templates) => {
 		for (let id in saves) {
 			let save = saves[id]
 			let template = templates[save.template]
 
-			for (let field of metaFields)
-				castField(save, field)
-
-			for (let field of template.root)
-				castField(save, field)
-
-			save.sections.forEach(section => {
-				for (let field of template.sections)
-					castField(section, field)
-			})
+			castSave(save, template)
 		}
+	}
+
+	/**
+	 * Generate an empty save for a given template.
+	 */
+	const emptySave = (template) => {
+		let save = {}
+
+		for (let field of metaFields)
+			save[field] = null
+
+		for (let field of template.root)
+			save[field] = null
+
+		save.sections = []
+
+		castSave(save, template)
 	}
 
 	export default {
@@ -263,13 +290,15 @@
 
 		methods: {
 			create() {
+				// The value of this.selectedTemplate is given by the dropdown.
 				this.selectedSave = null
-				// this.contents = template
+				this.contents = emptySave(this.selectedTemplate)
 			},
 
 			load() {
-				this.contents = this.saves[this.selectedSave]
+				// The value of this.selectedSave is given by the dropdown.
 				this.selectedTemplate = this.saves[this.selectedSave].template
+				this.contents = this.saves[this.selectedSave]
 			},
 
 			reset() {
