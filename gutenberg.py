@@ -42,6 +42,7 @@ def get_template(template_name):
 
     with open(desc_path) as desc_file:
         desc = yaml.load(desc_file)
+        desc['id'] = template_name
 
     source_path = os.path.join(desc_dir, desc['source'])
     source_relpath = os.path.relpath(source_path, templates_dir)
