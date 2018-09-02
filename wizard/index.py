@@ -55,3 +55,11 @@ def preview():
     data = parse(request.json)
     _, source_relpath = get_template(data['template'])
     return render(source_relpath, data)
+
+    try:
+        data = parse(request.json)
+        _, source_relpath = get_template(data['template'])
+        return render(source_relpath, data)
+    except Exception as e:
+        return "Une erreur s'est produite durant le rendu " +\
+               "de la diffusion :\n%s" % e

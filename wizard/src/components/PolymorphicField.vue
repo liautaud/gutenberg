@@ -14,6 +14,7 @@
 	import MarkdownInput from './MarkdownInput'
 	import DatetimeInput from './DatetimeInput'
 	import ChoiceInput from './ChoiceInput'
+	import TextListInput from './TextListInput'
 
 	export default {
 		props: ['field', 'contents'],
@@ -27,7 +28,7 @@
 					'color': Swatches,
 					'image': 'b-input',    // TODO(liautaud)
 					'choice': ChoiceInput,
-					'list': 'b-input',     // TODO(liautaud)
+					'list': TextListInput,
 				}
 			}
 		}
