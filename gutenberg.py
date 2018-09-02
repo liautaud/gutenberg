@@ -127,12 +127,10 @@ def optional(data, name, cast=str, required=False):
             raise Exception(
                 'Le champ %s doit contenir %s (trouvé %s)' %
                 (name, ' ou '.join(cast), value))
-
-    data[name] = cast(value)
-
-    # TODO(liautaud):
-    # print('CASTED data[%s] from %s into %s' %
-    #       (name, repr(value), repr(cast(value))))
+        else:
+            data[name] = value
+    else:
+        data[name] = cast(value)
 
     return None
 
