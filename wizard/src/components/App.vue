@@ -26,7 +26,7 @@
 		</b-modal>
 
 		<transition name="fade" mode="out-in">
-			<div class="container" v-if="!selectedTemplate || !selectedSave" key="menu">
+			<div class="container" v-if="contents === null" key="menu">
 				<div class="columns">
 					<div class="column">
 						<section class="box">
@@ -117,7 +117,7 @@
 								<strong>{{ section.title }}</strong>
 							</div>
 							<div class="level-right">
-								<a class="button is-medium">
+								<a class="button is-medium" @click="deleteSection(id)">
 									<b-icon icon="delete"></b-icon>
 								</a>
 							</div>
@@ -134,7 +134,7 @@
 
 					<b-field grouped position="is-right">
 						<p class="control">
-							<button class="button is-medium">
+							<button class="button is-medium" @click="addSection">
 								<span>Ajouter une section</span>
 								<b-icon icon="plus"></b-icon>
 							</button>
@@ -191,20 +191,23 @@
 	]
 
 	/**
+	 * Cast the data of a field to match the type expected by its template.
+	 */
+	const castField = (container, field) => {
+		if (!field.required &&
+			typeof container[field.id] == 'undefined') {
+			container[field.id] = null
+		}
+
+		if (field.type == 'date' && container[field.id] !== null) {
+			container[field.id] = new Date(container[field.id])
+		}
+	}
+
+	/**
 	 * Cast the data in a save to match the type expected by its template.
 	 */
 	const castSave = (save, template) => {
-		const castField = (container, field) => {
-			if (!field.required &&
-				typeof container[field.id] == 'undefined') {
-				container[field.id] = null
-			}
-
-			if (field.type == 'date') {
-				container[field.id] = new Date(container[field.id])
-			}
-		}
-
 		for (let field of metaFields)
 			castField(save, field)
 
@@ -236,14 +239,17 @@
 		let save = {}
 
 		for (let field of metaFields)
-			save[field] = null
+			save[field.id] = null
 
 		for (let field of template.root)
-			save[field] = null
+			save[field.id] = null
 
 		save.sections = []
 
 		castSave(save, template)
+
+		save.template = template.id
+		return save
 	}
 
 	export default {
@@ -292,7 +298,7 @@
 			create() {
 				// The value of this.selectedTemplate is given by the dropdown.
 				this.selectedSave = null
-				this.contents = emptySave(this.selectedTemplate)
+				this.contents = emptySave(this.templates[this.selectedTemplate])
 			},
 
 			load() {
@@ -317,6 +323,19 @@
 						this.contents = null
 					}
 				})
+			},
+
+			addSection() {
+				let section = {}
+
+				for (let field of this.templates[this.selectedTemplate].sections)
+					castField(section, field)
+
+				this.contents.sections.push(section)
+			},
+
+			deleteSection(id) {
+				this.contents.sections.splice(id, 1)
 			},
 
 			preview() {
