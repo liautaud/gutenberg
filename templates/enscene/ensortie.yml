@@ -5,6 +5,7 @@ root:
   - id: greeting
     name: Formule de politesse
     type: text
+    required: true
   - id: introduction
     name: Introduction
     type: markdown

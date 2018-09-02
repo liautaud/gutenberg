@@ -17,6 +17,7 @@ introduction: |
 sections:
   - title: Ubu Roi
     date: 2017-10-11 20:00
+    align: left
     place: TNP (Lyon 8ème)
     image: "https://www.tnp-villeurbanne.com/cms/wp-content/gallery/15-16-ubu-photos-spectacles/IMG_9920.jpg"
     content: |

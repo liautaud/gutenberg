@@ -1,6 +1,7 @@
 <template>
 	<b-field :label="field.name" horizontal>
 		<component :is="components[field.type]"
+			:definition="field"
 			:required="field.required"
 			v-model="contents[field.id]">
 		</component>
@@ -12,6 +13,7 @@
 
 	import MarkdownInput from './MarkdownInput'
 	import DatetimeInput from './DatetimeInput'
+	import ChoiceInput from './ChoiceInput'
 
 	export default {
 		props: ['field', 'contents'],
@@ -24,7 +26,7 @@
 					'datetime': DatetimeInput,
 					'color': Swatches,
 					'image': 'b-input',    // TODO(liautaud)
-					'choice': 'b-input',   // TODO(liautaud)
+					'choice': ChoiceInput,
 					'list': 'b-input',     // TODO(liautaud)
 				}
 			}

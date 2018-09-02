@@ -22,7 +22,6 @@
 		props: ['value'],
 
 		data() {
-			console.log('coucou', this.value)
 			return {
 				date: new Date(this.value),
 				time: new Date(this.value)
