@@ -22,9 +22,13 @@
 		props: ['value'],
 
 		data() {
-			return {
-				date: new Date(this.value),
-				time: new Date(this.value)
+			if (this.value === null) {
+				return { date: null, time: null }
+			} else {
+				return {
+					date: new Date(this.value),
+					time: new Date(this.value)
+				}
 			}
 		},
 

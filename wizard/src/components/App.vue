@@ -202,6 +202,10 @@
 		if (field.type == 'date' && container[field.id] !== null) {
 			container[field.id] = new Date(container[field.id])
 		}
+
+		if (field.type == 'list' && container[field.id] == null) {
+			container[field.id] = []
+		}
 	}
 
 	/**
