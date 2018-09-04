@@ -10,6 +10,14 @@
 			return { editor: null }
 		},
 
+		watch: {
+			value(updated) {
+				if (updated != this.editor.value()) {
+					this.editor.value(updated);
+				}
+			}
+		},
+
 		mounted() {
 			this.editor = new SimpleMDE({
 				element: this.$refs.editor,

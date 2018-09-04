@@ -34,17 +34,28 @@
 
 		watch: {
 			// value(updated) {
-			// 	this.date = new Date(updated)
-			// 	this.time = new Date(updated)
+			// 	let datetime = new Date(updated)
+
+			// 	if (this.date != datetime) {
+			// 		this.date = datetime
+			// 	}
+
+			// 	if (this.time != datetime) {
+			// 		this.time = datetime
+			// 	}
 			// }
 		},
 
 		computed: {
 			datetime() {
 				let dt = new Date(this.date)
-				dt.setHours(this.time.getHours())
-				dt.setMinutes(this.time.getMinutes())
-				dt.setSeconds(this.time.getSeconds())
+
+				if (this.time) {
+					dt.setHours(this.time.getHours())
+					dt.setMinutes(this.time.getMinutes())
+					dt.setSeconds(this.time.getSeconds())
+				}
+
 				return dt
 			}
 		},
