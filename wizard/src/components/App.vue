@@ -179,7 +179,22 @@
 			method: 'POST',
 			body: JSON.stringify(data)
 		})
-		.then(res => res.text())
+
+	/**
+	 * Fetches the list of templates and saves from the server.
+	 */
+	const fetchTemplatesAndSaves = (vm) =>
+		fetch('/templates')
+			.then(res => res.json())
+			.then(data => {
+				vm.templates = data
+				return fetch('/saves')
+			})
+			.then(res => res.json())
+			.then(data => {
+				castSaves(data, vm.templates)
+				vm.saves = data
+			})
 
 	/**
 	 * The fields which are defined implicitely for every template.
@@ -285,17 +300,7 @@
 		},
 
 		mounted() {
-			fetch('/templates')
-				.then(res => res.json())
-				.then(data => {
-					this.templates = data
-					return fetch('/saves')
-				})
-				.then(res => res.json())
-				.then(data => {
-					castSaves(data, this.templates)
-					this.saves = data
-				})
+			fetchTemplatesAndSaves(this)
 		},
 
 		methods: {
@@ -315,8 +320,8 @@
 				this.$dialog.confirm({
 					title: 'Effacer les modifications',
 					message: 'Êtes-vous sûr de vouloir effacer les modifications ? ' +
-					         'Tous les changements effectués depuis la dernière ' +
-					         'sauvegarde seront perdus.',
+							 'Tous les changements effectués depuis la dernière ' +
+							 'sauvegarde seront perdus.',
 					cancelText: 'Annuler',
 					confirmText: 'Effacer',
 					type: 'is-danger',
@@ -345,34 +350,68 @@
 			preview() {
 				this.previewActive = true
 
-				postJson('/render', this.contents).then(text => {
-					let previewDocument = (
-						this.$refs.previewFrame.contentDocument ||
-						this.$refs.previewFrame.contentWindow.document)
+				postJson('/render', this.contents)
+					.then(res => res.text())
+					.then(text => {
+						let previewDocument = (
+							this.$refs.previewFrame.contentDocument ||
+							this.$refs.previewFrame.contentWindow.document)
 
-					previewDocument
-						.getElementsByTagName('html')[0]
-						.innerHTML = text
-				})
+						previewDocument
+							.getElementsByTagName('html')[0]
+							.innerHTML = text
+					})
 			},
 
 			html() {
 				this.htmlActive = true
 
-				postJson('/render', this.contents).then(text => {
-					// We use the DOM to isolate the contents of the body,
-					// because we want the user to copy that to the webmail
-					// instead of the entire HTML output.
-					let virtualDom = document.createElement('html')
-					virtualDom.innerHTML = text
+				postJson('/render', this.contents)
+					.then(res => res.text())
+					.then(text => {
+						// We use the DOM to isolate the contents of the body,
+						// because we want the user to copy that to the webmail
+						// instead of the entire HTML output.
+						let virtualDom = document.createElement('html')
+						virtualDom.innerHTML = text
 
-					let virtualBody = virtualDom.getElementsByTagName('body')[0]
-					this.htmlContent = virtualBody.innerHTML
-				})
+						let virtualBody = virtualDom.getElementsByTagName('body')[0]
+						this.htmlContent = virtualBody.innerHTML
+					})
 			},
 
 			save() {
-				// TODO(liautaud)
+				// FIXME: This is not very pretty.
+				let target = '/save'
+				if (this.selectedSave) {
+					target += '?name=' + encodeURIComponent(this.selectedSave)
+				}
+
+				postJson(target, this.contents)
+					.then(response => {
+						if (!response.ok) {
+							throw Error()
+						}
+
+						return response.json()
+					})
+					.then(data => {
+						fetchTemplatesAndSaves(this)
+							.then(_ => {
+								this.selectedSave = data.name
+
+								this.$toast.open({
+									message: "La diffusion a bien été sauvegardée !",
+									type: 'is-success'
+								})
+							})
+					})
+					.catch(error => {
+						this.$toast.open({
+							message: "La diffusion n'a pas pu être sauvegardée !",
+							type: 'is-danger'
+						})
+					})
 			}
 		}
 	}

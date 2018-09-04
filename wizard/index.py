@@ -8,7 +8,8 @@ from .. import parse, render, get_template
 import glob
 import os.path
 import yaml
-import json
+import time
+import uuid
 
 app = Flask(__name__)
 
@@ -52,10 +53,6 @@ def saves():
 @app.route('/render', methods=['POST'])
 def preview():
     """Display a HTML rendering for a given source."""
-    data = parse(request.json)
-    _, source_relpath = get_template(data['template'])
-    return render(source_relpath, data)
-
     try:
         data = parse(request.json)
         _, source_relpath = get_template(data['template'])
@@ -63,3 +60,18 @@ def preview():
     except Exception as e:
         return "Une erreur s'est produite durant le rendu " +\
                "de la diffusion :\n%s" % e
+
+
+@app.route('/save', methods=['POST'])
+def save():
+    """Saves a given diffusion given its content."""
+    data = request.json
+    name = request.args.get('name')
+
+    if name is None:
+        when = time.strftime("%Y-%m-%d-%H%M%S")
+        name = when + '-' + str(uuid.uuid1())
+
+    with open(os.path.join('storage', name + '.yml'), 'w') as file:
+        yaml.dump(data, file, default_flow_style=False)
+        return jsonify({'name': name})
