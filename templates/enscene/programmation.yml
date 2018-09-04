@@ -1,0 +1,44 @@
+title: Enscène – Programmation
+source: programmation.html
+
+root:
+  - id: greeting
+    name: Formule de politesse
+    type: text
+    required: true
+  - id: introduction
+    name: Introduction
+    type: markdown
+    required: true
+
+sections:
+  - id: title
+    name: Titre de la section
+    type: text
+    required: true
+  - id: color
+    name: Couleur de la section
+    type: color
+  - id: image
+    name: Image de la section
+    type: image
+  - id: align
+    name: Position de l'image
+    type: choice
+    choices:
+      left: Gauche du texte
+      right: Droite du texte
+  - id: date
+    name: Date de l'événement
+    type: datetime
+  - id: place
+    name: Lieu de l'événement
+    type: text
+  - id: content
+    name: Contenu de la section
+    type: markdown
+    required: true
+  - id: appendices
+    name: Annexes de la section
+    type: list
+    items: paragraphs
