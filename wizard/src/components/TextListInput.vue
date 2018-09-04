@@ -1,20 +1,18 @@
 <template>
-
-    <b-tabs type="is-boxed">
-        <b-tab-item v-for="(content, i) in value" :label="i">
-        	<markdown-input v-model="value[i]"></markdown-input>
-        </b-tab-item>
-        <b-tab-item icon="plus"></b-tab-item>
-    </b-tabs>
-
-<!-- 	<b-select placeholder="Cliquez pour choisir une option" expanded v-model="value">
-		<option
-			v-for="(name, value) in definition.choices"
-			:value="value">
-			{{ name }}
-		</option>
-	</b-select>
- --></template>
+	<section>
+		<section v-for="content, i in value" class="box is-clearfix">
+			<markdown-input v-model="value[i]"></markdown-input>
+			<a class="button is-danger is-pulled-right" style="margin-top: 10px;" @click="remove(i)">
+				<b-icon icon="delete" size="is-small"></b-icon>&nbsp;
+				Supprimer
+			</a>
+		</section>
+		<a @click="add" class="button is-fullwidth">
+			<b-icon icon="plus"></b-icon>&nbsp;
+			Ajouter un élément
+		</a>
+	</section>
+</template>
 
 <script>
 	import MarkdownInput from './MarkdownInput'
@@ -27,11 +25,11 @@
 
 		methods: {
 			add() {
-				// this.$emit('input', this.editor.value())
+				this.value.push("")
 			},
 
-			remove() {
-				// this.$emit('input', this.editor.value())
+			remove(i) {
+				this.value.splice(i, 1)
 			}
 		}
 	}
