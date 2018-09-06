@@ -233,6 +233,9 @@
 		for (let field of template.root)
 			castField(save, field)
 
+		if (!save.sections)
+			save.sections = []
+
 		save.sections.forEach(section => {
 			for (let field of template.sections)
 				castField(section, field)
