@@ -3,7 +3,7 @@ from flask import request
 from flask import send_from_directory
 from flask import jsonify
 
-from .. import parse, render, get_template
+from gutenberg import parse, render, get_template
 
 import glob
 import os.path

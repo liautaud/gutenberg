@@ -16,6 +16,8 @@ FLASK_APP=index.py flask run
 
 ## Installation.
 
+Vous devez préalablement avoir installé la bibliothèque `gutenberg` sur votre serveur. Pour cela, vous pouvez vous référer aux instructions du fichier `README.md` à la racine du dépôt.
+
 ```
 python3 -m pip install --user -r requirements.txt
 ```
