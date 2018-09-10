@@ -3,7 +3,7 @@ from flask import request
 from flask import send_from_directory
 from flask import jsonify
 
-from gutenberg import parse, render, get_template
+from gutenberg import validate_and_cast_data, render, get_template
 
 import glob
 import os.path
@@ -54,8 +54,9 @@ def saves():
 def preview():
     """Display a HTML rendering for a given source."""
     try:
-        data = parse(request.json)
-        _, source_relpath = get_template(data['template'])
+        data = request.json
+        descriptor, source_relpath = get_template(data['template'])
+        validate_and_cast_data(data, descriptor)
         return render(source_relpath, data)
     except Exception as e:
         return "Une erreur s'est produite durant le rendu " +\

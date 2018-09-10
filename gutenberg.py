@@ -1,9 +1,24 @@
 import argparse
 import yaml
-import dateutil.parser
-import markdown
 import os.path
 import jinja2
+
+from fields import FIELD_TYPES, FIELD_CASTS
+
+META_FIELDS = [
+    {'id': 'title', 'name': "Nom de la diffusion", 'type': 'text'},
+    {'id': 'author', 'name': "Nom de l'auteurice", 'type': 'text'},
+    {'id': 'date', 'name': "Date de la diffusion", 'type': 'date'}]
+
+
+class DescriptorError(Exception):
+    """An error when parsing a template descriptor."""
+    pass
+
+
+class DataError(Exception):
+    """An error when parsing template data."""
+    pass
 
 
 def main():
@@ -18,10 +33,10 @@ def main():
 
     args = parser.parse_args()
     data = yaml.load(args.source)
-    parsed = parse(data)
 
-    descriptor, source_relpath = get_template(parsed['template'])
-    output = render(source_relpath, parsed)
+    descriptor, source_relpath = get_template(data['template'])
+    validate_and_cast_data(data, descriptor)
+    output = render(source_relpath, data)
 
     with open(args.target, 'w') as target:
         target.write(output)
@@ -50,89 +65,71 @@ def get_template(template_name):
     return (desc, source_relpath)
 
 
-def parse(data):
-    """Parse and validate the input data."""
-    date = dateutil.parser.parse
+def validate_descriptor(descriptor):
+    """Validate some template descriptor."""
+    if 'title' not in descriptor:
+        raise DescriptorError(
+            "Le descripteur doit contenir un titre (champ `title`).")
 
-    def strip(s):
-        start = s.find('>') + 1
-        end = len(s) - s[::-1].find('<') - 1
+    if 'source' not in descriptor:
+        raise DescriptorError(
+            "Le descripteur doit contenir un chemin vers la source "
+            "HTML du template (champ `source`).")
 
-        return s[start:end]
+    if 'root' not in descriptor:
+        raise DescriptorError(
+            "Le descripteur doit contenir une définition de racine "
+            "(champ `root`).")
 
-    def mark(text):
-        md = markdown.Markdown()
-        return md.convert(text)
+    if 'sections' not in descriptor:
+        raise DescriptorError(
+            "Le descripteur doit contenir une définition de section "
+            "(champ `sections`).")
 
-    def paragraphs(text):
-        return [strip(mark(s)) for s in text.splitlines()]
+    def validate_item(item):
+        if 'id' not in item:
+            raise DescriptorError(
+                "Chaque élément déclaré dans le descripteur doit avoir un "
+                "identifiant (champ `id`).")
 
-    # TODO(liautaud):
-    # Remove the previous validation routine, and replace it with
-    # data from the new template description files.
+        if 'name' not in item:
+            raise DescriptorError(
+                "L'élément d'identifiant %s déclaré dans le descripteur doit "
+                "avoir un nom d'affichage (champ `name`)." % (item['id']))
 
-    # Validate the YAML schema.
-    required(data, 'author')
-    required(data, 'title')
-    required(data, 'date', date)
-    required(data, 'template')
-    optional(data, 'greeting')
-    optional(data, 'introduction', mark)
-    required(data, 'sections.title')
-    optional(data, 'sections.color')
-    optional(data, 'sections.image')
-    optional(data, 'sections.align', ('left', 'right'))
-    optional(data, 'sections.date')
-    optional(data, 'sections.place')
-    required(data, 'sections.content', mark)
-    optional(data, 'sections.appendices.*', paragraphs)
-    optional(data, 'closing')
+        if 'type' not in item:
+            raise DescriptorError(
+                "L'élément d'identifiant %s déclaré dans le descripteur doit "
+                "avoir un type (champ `type`). Valeurs possibles : %s." %
+                (item['id'], FIELD_TYPES.join(', ')))
 
-    # Return the converted data.
-    return data
+    for item in descriptor['root']:
+        validate_item(item)
 
-
-def required(data, name, cast=str):
-    return optional(data, name, cast, True)
+    for item in descriptor['sections']:
+        validate_item(item)
 
 
-def optional(data, name, cast=str, required=False):
-    """
-    Check whether `data` contains the field `name`, and cast
-    the field using a given function if necessary.
-    """
-    parts = name.split('.', 1)
-    name = parts[0]
+def validate_and_cast_item(container, item_id, item_desc):
+    """Validate and cast some item according to its descriptor."""
+    required = 'required' in item_desc and item_desc['required']
 
-    if name not in data or data[name] is None:
-        if required and not len(parts) > 1:
-            raise Exception(
-                'Le champ %s est manquant' % (name))
-        else:
-            return None
+    if item_id not in container and required:
+        raise DataError("L'élément `%s` est manquant." % (item_desc['name']))
 
-    value = data[name]
+    if item_id in container:
+        cast = FIELD_CASTS[item_desc['type']]
+        container[item_id] = cast(container[item_id], item_desc)
 
-    if len(parts) > 1:
-        if parts[1] == '*':
-            data[name] = list(map(cast, value))
-        else:
-            for entry in value:
-                optional(entry, parts[1], cast, required)
 
-        return None
+def validate_and_cast_data(data, desc):
+    """Validate and cast the input data according to its descriptor."""
+    for item_desc in desc['root'] + META_FIELDS:
+        validate_and_cast_item(data, item_desc['id'], item_desc)
 
-    if isinstance(cast, tuple):
-        if value not in cast:
-            raise Exception(
-                'Le champ %s doit contenir %s (trouvé %s)' %
-                (name, ' ou '.join(cast), value))
-        else:
-            data[name] = value
-    else:
-        data[name] = cast(value)
-
-    return None
+    if 'sections' in data:
+        for (section, item_desc) in zip(data['sections'], desc['sections']):
+            validate_and_cast_item(section, item_desc['id'], item_desc)
 
 
 def render(path, variables={}):
